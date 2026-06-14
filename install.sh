@@ -53,7 +53,7 @@ info "Installing Python dependencies (cartopy can take several minutes on a Pi).
 "$VENV/bin/pip" install -r "$PROJECT_DIR/requirements.txt" -q
 
 info "Installing IT8951 display driver..."
-"$VENV/bin/pip" install IT8951 -q
+"$VENV/bin/pip" install RPi.GPIO IT8951 -q
 
 # ---------------------------------------------------------------------------
 # 3. Required directories
