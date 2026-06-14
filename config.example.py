@@ -21,12 +21,28 @@ SUBTLE = True
 VCOM = -2.15  # check the sticker on your e-paper panel
 
 # --- Locations ---
-# Define your location once here. coords: [latitude, longitude]
+# Define your forecast location here. coords: [latitude, longitude]
+# It will be automatically pinned on the map.
 forecast_locations = {
     "MyCity": {
         "coords": [53.32, -6.27],
         "country": "Ireland",   # "Ireland" or "Germany"
         "region": "Dublin",     # county for Met Éireann warnings (Ireland only)
+    },
+}
+
+# --- Extra map pins ---
+# Optional extra locations to pin on the map (e.g. nearby cities).
+# These are display-only and do not affect the forecast.
+# Format: "Label": [latitude, longitude]
+extra_map_pins = {
+    "Ireland": {
+        # "Cork": [51.8985, -8.4756],
+        # "Galway": [53.2707, -9.0568],
+    },
+    "Germany": {
+        # "Munich": [48.1351, 11.5820],
+        # "Hamburg": [53.5753, 10.0153],
     },
 }
 
@@ -118,9 +134,8 @@ map_settings = {
         "focus_country_codes": ["IRL", "NIR"],
         "non_focus_country_codes": ["WLS", "ENG", "SCT", "IMN"],
         "points_of_interest": {
-            name: loc["coords"]
-            for name, loc in forecast_locations.items()
-            if loc["country"] == "Ireland"
+            **{name: loc["coords"] for name, loc in forecast_locations.items() if loc["country"] == "Ireland"},
+            **extra_map_pins.get("Ireland", {}),
         },
         "forecast_location": WEATHER_LOCATION,
         "tiles": {
@@ -141,9 +156,8 @@ map_settings = {
             "BEL", "LUX", "NLD", "ITA", "HRV", "BIH", "SWE", "SVK", "SVN",
         ],
         "points_of_interest": {
-            name: loc["coords"]
-            for name, loc in forecast_locations.items()
-            if loc["country"] == "Germany"
+            **{name: loc["coords"] for name, loc in forecast_locations.items() if loc["country"] == "Germany"},
+            **extra_map_pins.get("Germany", {}),
         },
         "forecast_location": WEATHER_LOCATION,
         "tiles": {
