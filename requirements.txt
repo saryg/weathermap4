@@ -1,6 +1,7 @@
 requests
 matplotlib>=3.9
 cartopy>=0.23
+scipy
 mercantile
 Pillow>=10.1
 Shapely>=2.0
