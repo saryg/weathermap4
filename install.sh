@@ -56,7 +56,20 @@ info "Installing IT8951 display driver..."
 "$VENV/bin/pip" install git+https://github.com/GregDMeyer/IT8951.git -q
 
 # ---------------------------------------------------------------------------
-# 3. Config
+# 3. Fonts
+# ---------------------------------------------------------------------------
+FONT="$PROJECT_DIR/fonts/BebasNeue-Regular.ttf"
+if [[ -f "$FONT" ]]; then
+    info "Font already present — skipping download."
+else
+    info "Downloading BebasNeue font..."
+    wget -q "https://github.com/google/fonts/raw/main/ofl/bebasneue/BebasNeue-Regular.ttf" \
+         -O "$PROJECT_DIR/fonts/BebasNeue-Regular.ttf"
+    info "Font installed."
+fi
+
+# ---------------------------------------------------------------------------
+# 4. Config
 # ---------------------------------------------------------------------------
 if [[ ! -f "$PROJECT_DIR/config.py" ]]; then
     cp "$PROJECT_DIR/config.example.py" "$PROJECT_DIR/config.py"
@@ -67,7 +80,7 @@ if [[ ! -f "$PROJECT_DIR/config.py" ]]; then
 fi
 
 # ---------------------------------------------------------------------------
-# 4. Natural Earth shapefiles
+# 5. Natural Earth shapefiles
 # ---------------------------------------------------------------------------
 SHAPEFILES="$PROJECT_DIR/ne_10m_map_units/ne_10m_admin_0_map_units.shp"
 if [[ -f "$SHAPEFILES" ]]; then
@@ -83,7 +96,7 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 5. Systemd service + timer (10-minute refresh)
+# 6. Systemd service + timer (10-minute refresh)
 # ---------------------------------------------------------------------------
 info "Installing systemd units..."
 
@@ -121,7 +134,7 @@ sudo systemctl start ${SERVICE}.timer
 info "Daemon enabled — weathermap will update every 10 minutes."
 
 # ---------------------------------------------------------------------------
-# 6. 'weathermap' shell command
+# 7. 'weathermap' shell command
 # ---------------------------------------------------------------------------
 BASHRC="$HOME/.bashrc"
 MARKER="# weathermap-cli"
