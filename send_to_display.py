@@ -6,32 +6,34 @@ the IT8951 dependency is loaded lazily at call time.
 import argparse
 
 
-def _it8951():
-    """Import IT8951 lazily, raising a clear RuntimeError if not installed."""
+def _make_display(vcom, rotate):
     try:
         from IT8951.display import AutoEPDDisplay
-        from IT8951.functions import display_image, clear_display
-        return AutoEPDDisplay, display_image, clear_display
     except ImportError:
         raise RuntimeError(
             "IT8951 not available. Are you running on a Raspberry Pi with IT8951 installed?\n"
-            "  pip install IT8951\n"
             "Run with --no-display to skip sending to the screen."
         )
+    return AutoEPDDisplay(vcom=vcom, rotate=rotate, mirror=False, spi_hz=24000000)
 
 
 def send(image_path, vcom=-2.15, rotate="CCW"):
-    AutoEPDDisplay, display_image, _ = _it8951()
-    display = AutoEPDDisplay(vcom=vcom, rotate=rotate, mirror=False, spi_hz=24000000)
+    from PIL import Image
+    from IT8951 import constants
+    display = _make_display(vcom, rotate)
     print("VCOM set to", display.epd.get_vcom())
-    display_image(image_path, display)
+    display.frame_buf.paste(0xFF, box=(0, 0, display.width, display.height))
+    img = Image.open(image_path)
+    img.thumbnail((display.width, display.height))
+    paste_coords = [display.width - img.size[0], display.height - img.size[1]]
+    display.frame_buf.paste(img, paste_coords)
+    display.draw_full(constants.DisplayModes.GC16)
     print("Done.")
 
 
 def clear(vcom=-2.15, rotate="CCW"):
-    AutoEPDDisplay, _, clear_display = _it8951()
-    display = AutoEPDDisplay(vcom=vcom, rotate=rotate, mirror=False, spi_hz=24000000)
-    clear_display(display)
+    display = _make_display(vcom, rotate)
+    display.clear()
     print("Display cleared.")
 
 
