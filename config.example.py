@@ -1,75 +1,93 @@
 """
-Copy this file to config.py and fill in your own locations.
+Copy this file to config.py and edit the USER SETTINGS section below.
 config.py is gitignored — this file is the committed template.
 """
 import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# --- User settings ---
-WEATHER_LOCATION = "MyCity"   # must match a key in forecast_locations
+# ===========================================================================
+# USER SETTINGS — edit these
+# ===========================================================================
+
+# --- Your location ---
+WEATHER_LOCATION = "MyCity"   # must match a key in forecast_locations below
 MAP_COUNTRY = "Ireland"       # "Ireland" or "Germany"
-SHOW_RADAR = True
-RADAR_SOURCE = "rainviewer"  # "rainviewer" or "met" (Met Éireann, Ireland only)
-SHOW_FORECAST = True
-SHOW_SIDEBAR = True
-SHOW_CURRENT_CONDITIONS = True
-SHOW_WARNINGS = True
-SUBTLE = True
 
-# --- Display (Raspberry Pi only) ---
-VCOM = -2.15  # check the sticker on your e-paper panel
-
-# --- Locations ---
-# Define your forecast location here. coords: [latitude, longitude]
-# It will be automatically pinned on the map.
 forecast_locations = {
     "MyCity": {
-        "coords": [53.32, -6.27],
-        "country": "Ireland",   # "Ireland" or "Germany"
-        "region": "Dublin",     # county for Met Éireann warnings (Ireland only)
+        "coords": [53.32, -6.27],   # [latitude, longitude]
+        "country": "Ireland",       # "Ireland" or "Germany"
+        "region": "Dublin",         # county for Met Éireann warnings (Ireland only)
+    },
+    "Rathmines": {
+        "coords": [53.3243, -6.2654],
+        "country": "Ireland",
+        "region": "Dublin",
+    },
+    "Terenure": {
+        "coords": [53.3131, -6.2901],
+        "country": "Ireland",
+        "region": "Dublin",
     },
 }
 
-# --- Extra map pins ---
-# Optional extra locations to pin on the map (e.g. nearby cities).
-# These are display-only and do not affect the forecast.
-# Format: "Label": [latitude, longitude]
+# --- Extra map pins (optional) ---
+# Additional locations to mark on the map. Forecast location is always pinned automatically.
+# Uncomment or add lines for your country. Format: "Label": [latitude, longitude]
 extra_map_pins = {
     "Ireland": {
-        # "Cork": [51.8985, -8.4756],
+        "Rathmines": [53.3243, -6.2654],
+        "Terenure":  [53.3131, -6.2901],
+        # "Cork":   [51.8985, -8.4756],
         # "Galway": [53.2707, -9.0568],
     },
     "Germany": {
-        # "Munich": [48.1351, 11.5820],
+        # "Munich":  [48.1351, 11.5820],
         # "Hamburg": [53.5753, 10.0153],
     },
 }
 
-# --- Paths (leave as-is unless you move files) ---
-font_path = os.path.join(BASE_DIR, "fonts", "BebasNeue-Regular.ttf")
-icon_path = os.path.join(BASE_DIR, "icons-transparent") + os.sep
-base_map_path = os.path.join(BASE_DIR, "images", "{country}_base_map.png")
-weathermap_bmp_path = os.path.join(BASE_DIR, "images", "weathermap.bmp")
+# --- Display ---
+VCOM = -2.15      # check the sticker on your e-paper panel ribbon cable
+
+# --- What to show ---
+SHOW_RADAR             = True
+SHOW_FORECAST          = True
+SHOW_SIDEBAR           = True
+SHOW_CURRENT_CONDITIONS = True
+SHOW_WARNINGS          = True
+SUBTLE                 = True
+RADAR_SOURCE           = "rainviewer"  # "rainviewer" or "met" (Met Éireann, Ireland only)
+
+# ===========================================================================
+# INTERNAL SETTINGS — no need to edit below this line
+# ===========================================================================
+
+# --- Paths ---
+font_path             = os.path.join(BASE_DIR, "fonts", "BebasNeue-Regular.ttf")
+icon_path             = os.path.join(BASE_DIR, "icons-transparent") + os.sep
+base_map_path         = os.path.join(BASE_DIR, "images", "{country}_base_map.png")
+weathermap_bmp_path   = os.path.join(BASE_DIR, "images", "weathermap.bmp")
 map_unit_shapefile_path = os.path.join(BASE_DIR, "ne_10m_map_units", "ne_10m_admin_0_map_units.shp")
-radar_map_path = os.path.join(BASE_DIR, "images", "radar_map.png")
-pickle_path = os.path.join(BASE_DIR, "plots", "{country}.axes.pickle")
+radar_map_path        = os.path.join(BASE_DIR, "images", "radar_map.png")
+pickle_path           = os.path.join(BASE_DIR, "plots", "{country}.axes.pickle")
 
 # --- Screen ---
-screen_width = 825
-screen_height = 1200
-dpi = 150
-sidebar_width = 80
-sidebar_height = screen_height
+screen_width     = 825
+screen_height    = 1200
+dpi              = 150
+sidebar_width    = 80
+sidebar_height   = screen_height
 map_display_width = screen_width - sidebar_width
 
 # --- Icon sizes ---
-SMALLER_ICON_SIZE = (30, 30)
+SMALLER_ICON_SIZE      = (30, 30)
 ALMOST_SMALL_ICON_SIZE = (35, 35)
-SMALL_ICON_SIZE = (40, 40)
-ALMOST_MED_ICON_SIZE = (55, 55)
-MED_ICON_SIZE = (60, 60)
-LARGE_ICON_SIZE = (80, 80)
+SMALL_ICON_SIZE        = (40, 40)
+ALMOST_MED_ICON_SIZE   = (55, 55)
+MED_ICON_SIZE          = (60, 60)
+LARGE_ICON_SIZE        = (80, 80)
 
 # --- Font sizes ---
 FONT_SIZE_SMALLER     = 20
@@ -79,7 +97,7 @@ FONT_SIZE_LARGE       = 45
 FONT_SIZE_LARGER      = 50
 FONT_SIZE_EXTRA_LARGE = 65
 
-# --- Fonts (loaded at build time, not at import) ---
+# --- Fonts (loaded at build time) ---
 SMALLER_FONT     = None
 SMALL_FONT       = None
 MED_FONT         = None
@@ -99,7 +117,7 @@ def load_fonts():
     EXTRA_LARGE_FONT = ImageFont.truetype(font_path, FONT_SIZE_EXTRA_LARGE)
 
 
-# --- URLs (no API key required) ---
+# --- URLs ---
 met_eireann_weather_warnings_url = (
     "https://www.met.ie/Open_Data/json/warning_{weather_warning_region}.json"
 )
