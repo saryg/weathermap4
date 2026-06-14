@@ -2,6 +2,8 @@
 
 Displays a live radar map and weather forecast on a Waveshare 9.7" e-paper screen connected to a Raspberry Pi. Fetches data, draws the map, and pushes it to the display — runs on a cron schedule.
 
+![Weathermap preview](sample_image_weathermap.png)
+
 
 ---
 
@@ -35,7 +37,7 @@ No API key required.
 
 ## Setup
 
-See [SETUP_PI.md](SETUP_PI.md) for full Raspberry Pi installation instructions.
+See [SETUP_GUIDE.md](SETUP_GUIDE.md) for full Raspberry Pi installation instructions.
 
 For a quick test on any machine (no display required):
 
