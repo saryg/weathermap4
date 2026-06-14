@@ -21,11 +21,12 @@ SUBTLE = True
 VCOM = -2.15  # check the sticker on your e-paper panel
 
 # --- Locations ---
+# Define your location once here. coords: [latitude, longitude]
 forecast_locations = {
     "MyCity": {
-        "coords": [53.32, -6.27],   # [latitude, longitude]
-        "country": "Ireland",       # "Ireland" or "Germany"
-        "region": "Dublin",         # county for Met Éireann warnings (Ireland only)
+        "coords": [53.32, -6.27],
+        "country": "Ireland",   # "Ireland" or "Germany"
+        "region": "Dublin",     # county for Met Éireann warnings (Ireland only)
     },
 }
 
@@ -54,25 +55,32 @@ ALMOST_MED_ICON_SIZE = (55, 55)
 MED_ICON_SIZE = (60, 60)
 LARGE_ICON_SIZE = (80, 80)
 
+# --- Font sizes ---
+FONT_SIZE_SMALLER     = 20
+FONT_SIZE_SMALL       = 25
+FONT_SIZE_MED         = 35
+FONT_SIZE_LARGE       = 45
+FONT_SIZE_LARGER      = 50
+FONT_SIZE_EXTRA_LARGE = 65
+
 # --- Fonts (loaded at build time, not at import) ---
-SMALLER_FONT = None
-SMALL_FONT = None
-MED_FONT = None
-LARGE_FONT = None
-LARGER_FONT = None
+SMALLER_FONT     = None
+SMALL_FONT       = None
+MED_FONT         = None
+LARGE_FONT       = None
+LARGER_FONT      = None
 EXTRA_LARGE_FONT = None
 
 
 def load_fonts():
-    """Load PIL fonts. Called once at the start of build()."""
     global SMALLER_FONT, SMALL_FONT, MED_FONT, LARGE_FONT, LARGER_FONT, EXTRA_LARGE_FONT
     from PIL import ImageFont
-    SMALLER_FONT = ImageFont.truetype(font_path, 20)
-    SMALL_FONT = ImageFont.truetype(font_path, 25)
-    MED_FONT = ImageFont.truetype(font_path, 35)
-    LARGE_FONT = ImageFont.truetype(font_path, 45)
-    LARGER_FONT = ImageFont.truetype(font_path, 50)
-    EXTRA_LARGE_FONT = ImageFont.truetype(font_path, 65)
+    SMALLER_FONT     = ImageFont.truetype(font_path, FONT_SIZE_SMALLER)
+    SMALL_FONT       = ImageFont.truetype(font_path, FONT_SIZE_SMALL)
+    MED_FONT         = ImageFont.truetype(font_path, FONT_SIZE_MED)
+    LARGE_FONT       = ImageFont.truetype(font_path, FONT_SIZE_LARGE)
+    LARGER_FONT      = ImageFont.truetype(font_path, FONT_SIZE_LARGER)
+    EXTRA_LARGE_FONT = ImageFont.truetype(font_path, FONT_SIZE_EXTRA_LARGE)
 
 
 # --- URLs (no API key required) ---
@@ -110,9 +118,11 @@ map_settings = {
         "focus_country_codes": ["IRL", "NIR"],
         "non_focus_country_codes": ["WLS", "ENG", "SCT", "IMN"],
         "points_of_interest": {
-            "MyCity": [53.32, -6.27],
+            name: loc["coords"]
+            for name, loc in forecast_locations.items()
+            if loc["country"] == "Ireland"
         },
-        "forecast_location": "MyCity",
+        "forecast_location": WEATHER_LOCATION,
         "tiles": {
             8: {"xrange": range(119, 125), "yrange": range(79, 87)},
             7: {"xrange": range(59, 63), "yrange": range(39, 43)},
@@ -131,9 +141,11 @@ map_settings = {
             "BEL", "LUX", "NLD", "ITA", "HRV", "BIH", "SWE", "SVK", "SVN",
         ],
         "points_of_interest": {
-            "Berlin": [52.52, 13.40],   # replace with your city
+            name: loc["coords"]
+            for name, loc in forecast_locations.items()
+            if loc["country"] == "Germany"
         },
-        "forecast_location": "Berlin",  # must match a key in forecast_locations above
+        "forecast_location": WEATHER_LOCATION,
         "tiles": {
             6: {"xrange": range(32, 36), "yrange": range(19, 24)},
             5: {"xrange": range(16, 18), "yrange": range(9, 12)},

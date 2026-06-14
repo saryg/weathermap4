@@ -69,13 +69,7 @@ forecast_locations = {
 }
 ```
 
-To pin it on the map, add to `map_settings["Ireland"]["points_of_interest"]`:
-
-```python
-"points_of_interest": {
-    "Dublin": [53.3498, -6.2603],
-},
-```
+Your location is automatically pinned on the map — no need to edit `map_settings`.
 
 ---
 
