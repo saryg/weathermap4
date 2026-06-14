@@ -35,7 +35,7 @@ echo ""
 info "Installing system packages..."
 sudo apt-get update -qq
 sudo apt-get install -y --no-install-recommends \
-    python3-pip python3-venv git \
+    python3-pip python3-venv python3-dev git \
     libopenblas-dev \
     libgeos-dev libproj-dev proj-data proj-bin libgdal-dev \
     wget unzip

@@ -99,7 +99,7 @@ weathermap logs               # live output
 ```bash
 sudo apt update && sudo apt upgrade -y
 sudo apt install -y \
-    python3-pip python3-venv git \
+    python3-pip python3-venv python3-dev git \
     libopenblas-dev \
     libgeos-dev libproj-dev proj-data proj-bin libgdal-dev
 ```
