@@ -137,24 +137,38 @@ def getLatestRadarPath():
 
 def makeRadarMap(country, path=None):
     """Render radar via RainViewer tile CDN onto the cartopy base map."""
+    import cartopy.crs as ccrs
     import cartopy.io.img_tiles as cimgt
     import matplotlib.pyplot as plt
 
     if path is None:
         path = getLatestRadarPath()
 
-    ax = loadOrCreateBaseMapPickle(country)
+    # Render radar tiles onto a blank figure — no outlines, no base map
+    proj = ccrs.Mercator(central_longitude=config.map_settings[country]["centre_lon"])
+    fig, ax = plt.subplots(
+        figsize=(config.screen_width / config.dpi, config.screen_height / config.dpi),
+        dpi=config.dpi,
+        subplot_kw={"projection": proj},
+    )
+    ax.set_extent(config.map_settings[country]["extent"])
+    ax.set_facecolor("white")
 
     z = config.map_settings[country]["zoom"]
     url = config.rainviewer_radar_tile_url.format(
         path=path, x="{x}", y="{y}", z="{z}"
     )
     tiles = cimgt.GoogleTiles(url=url, desired_tile_form="RGBA")
-    ax.add_image(tiles, z, zorder=50)
+    ax.add_image(tiles, z)
+    ax.set_position([0, 0, 1, 1])
 
-    plt.gca().set_position([0, 0, 1, 1])
-    plt.savefig(config.radar_map_path)
-    _remap_rainviewer_to_grayscale(config.radar_map_path, country)
+    with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp:
+        tmp_path = tmp.name
+    plt.savefig(tmp_path)
+    plt.close(fig)
+
+    _remap_rainviewer_to_grayscale(tmp_path, country)
+    os.unlink(tmp_path)
     logger.info("Saved radar map")
     return config.radar_map_path
 
@@ -323,7 +337,7 @@ def _latlon_to_pixel(lats, lons, map_settings):
     return px, py
 
 
-def _remap_rainviewer_to_grayscale(path, country):
+def _remap_rainviewer_to_grayscale(radar_tiles_path, country):
     """
     Remap RainViewer tile colors to e-paper grayscale using the official Universal Blue
     (scheme 2) color table from rainviewer.com/api/color-schemes.html.
@@ -362,7 +376,7 @@ def _remap_rainviewer_to_grayscale(path, country):
     # dBZ 10 → gray 208 (e-paper level 13), dBZ 65 → gray 16 (level 1)
     table_gray = np.clip(208.0 - (dbz_vals - 10.0) / 55.0 * 192.0, 16.0, 208.0).astype(np.uint8)
 
-    img = Image.open(path).convert("RGB")
+    img = Image.open(radar_tiles_path).convert("RGB")
     arr = np.array(img, dtype=np.float32)
 
     # Any pixel that differs from the white tile background is radar
@@ -387,7 +401,7 @@ def _remap_rainviewer_to_grayscale(path, country):
         createBaseMap(country)
     base = Image.open(base_map_path).convert("RGB")
     base.paste(radar_img, (0, 0), radar_img)
-    base.save(path)
+    base.save(config.radar_map_path)
 
 
 def _dbz_to_rgba(dbz):
