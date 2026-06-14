@@ -37,10 +37,10 @@ forecast_locations = {
 # Uncomment or add lines for your country. Format: "Label": [latitude, longitude]
 extra_map_pins = {
     "Ireland": {
-        "Rathmines": [53.3243, -6.2654],
-        "Terenure":  [53.3131, -6.2901],
-        # "Cork":   [51.8985, -8.4756],
-        # "Galway": [53.2707, -9.0568],
+        # "Rathmines": [53.3243, -6.2654],
+        # "Terenure":  [53.3131, -6.2901],
+        # "Cork":      [51.8985, -8.4756],
+        # "Galway":    [53.2707, -9.0568],
     },
     "Germany": {
         # "Munich":  [48.1351, 11.5820],
