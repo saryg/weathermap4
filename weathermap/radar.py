@@ -43,8 +43,11 @@ def createBaseMap(country):
         non_focus_countries, ccrs.PlateCarree(),
         edgecolor="grey", facecolor="none", linewidth=0.6, zorder=2,
     )
+
+    from shapely.ops import unary_union
+    merged_focus = unary_union([g.buffer(0.001) for g in focus_countries]).buffer(-0.001)
     ax.add_geometries(
-        focus_countries, ccrs.PlateCarree(),
+        [merged_focus], ccrs.PlateCarree(),
         edgecolor="black", facecolor="none", linewidth=1.4, zorder=2,
     )
 
