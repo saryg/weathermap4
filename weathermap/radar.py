@@ -154,7 +154,7 @@ def makeRadarMap(country, path=None):
 
     plt.gca().set_position([0, 0, 1, 1])
     plt.savefig(config.radar_map_path)
-    _remap_rainviewer_to_grayscale(config.radar_map_path)
+    _remap_rainviewer_to_grayscale(config.radar_map_path, country)
     logger.info("Saved radar map")
     return config.radar_map_path
 
@@ -323,7 +323,7 @@ def _latlon_to_pixel(lats, lons, map_settings):
     return px, py
 
 
-def _remap_rainviewer_to_grayscale(path):
+def _remap_rainviewer_to_grayscale(path, country):
     """
     Remap RainViewer tile colors to e-paper grayscale using the official Universal Blue
     (scheme 2) color table from rainviewer.com/api/color-schemes.html.
@@ -381,7 +381,11 @@ def _remap_rainviewer_to_grayscale(path):
     radar_layer[is_radar, 3] = 220
 
     radar_img = Image.fromarray(radar_layer, "RGBA").filter(ImageFilter.GaussianBlur(radius=3))
-    base = Image.open(config.base_map_path.format(country="Ireland")).convert("RGB")
+    base_map_path = config.base_map_path.format(country=country)
+    if not os.path.exists(base_map_path):
+        logger.info("Base map PNG missing — regenerating for %s", country)
+        createBaseMap(country)
+    base = Image.open(base_map_path).convert("RGB")
     base.paste(radar_img, (0, 0), radar_img)
     base.save(path)
 
