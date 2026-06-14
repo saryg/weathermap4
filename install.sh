@@ -56,6 +56,12 @@ info "Installing IT8951 display driver..."
 "$VENV/bin/pip" install git+https://github.com/GregDMeyer/IT8951.git -q
 
 # ---------------------------------------------------------------------------
+# 3. Required directories
+# ---------------------------------------------------------------------------
+mkdir -p "$PROJECT_DIR/plots" "$PROJECT_DIR/images"
+info "Directories ready."
+
+# ---------------------------------------------------------------------------
 # 3. Fonts
 # ---------------------------------------------------------------------------
 FONT="$PROJECT_DIR/fonts/BebasNeue-Regular.ttf"

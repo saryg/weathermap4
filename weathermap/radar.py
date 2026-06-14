@@ -59,6 +59,8 @@ def createBaseMap(country):
     plt.gca().set_position([0, 0, 1, 1])
 
     pickle_fn = config.pickle_path.format(country=country)
+    os.makedirs(os.path.dirname(pickle_fn), exist_ok=True)
+    os.makedirs(os.path.dirname(config.base_map_path.format(country=country)), exist_ok=True)
     with open(pickle_fn, "wb") as f:
         pickle.dump(ax, f)
     logger.info("Saved base map pickle for %s", country)
