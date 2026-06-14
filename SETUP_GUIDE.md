@@ -116,6 +116,8 @@ pip install IT8951
 
 ### Shapefiles
 
+Downloaded automatically by the installer, or manually:
+
 ```bash
 wget https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_map_units.zip
 unzip ne_10m_admin_0_map_units.zip -d ne_10m_map_units/

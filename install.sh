@@ -67,23 +67,19 @@ if [[ ! -f "$PROJECT_DIR/config.py" ]]; then
 fi
 
 # ---------------------------------------------------------------------------
-# 4. Natural Earth shapefiles (included in repo — download only if missing)
+# 4. Natural Earth shapefiles
 # ---------------------------------------------------------------------------
 SHAPEFILES="$PROJECT_DIR/ne_10m_map_units/ne_10m_admin_0_map_units.shp"
 if [[ -f "$SHAPEFILES" ]]; then
     info "Shapefiles already present — skipping download."
-elif command -v wget &>/dev/null; then
-    info "Shapefiles not found — downloading from naciscdn.org..."
+else
+    info "Downloading shapefiles from naciscdn.org..."
     wget -q "https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_map_units.zip" \
          -O /tmp/ne_10m_admin_0_map_units.zip
     mkdir -p "$PROJECT_DIR/ne_10m_map_units"
     unzip -q /tmp/ne_10m_admin_0_map_units.zip -d "$PROJECT_DIR/ne_10m_map_units"
     rm /tmp/ne_10m_admin_0_map_units.zip
     info "Shapefiles downloaded."
-else
-    warn "Shapefiles missing and wget not available — skipping."
-    warn "Download manually: https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_map_units.zip"
-    warn "Unzip into: $PROJECT_DIR/ne_10m_map_units/"
 fi
 
 # ---------------------------------------------------------------------------

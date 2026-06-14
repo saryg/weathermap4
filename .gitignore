@@ -4,3 +4,4 @@
 .pytest_cache/
 logs/
 config.py
+ne_10m_map_units/
