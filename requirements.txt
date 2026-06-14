@@ -1,6 +1,6 @@
 requests
-matplotlib==3.6.2
+matplotlib>=3.9
 mercantile
-Pillow==9.3.0
-Shapely==1.8.5.post1
+Pillow>=10.1
+Shapely>=2.0
 ephem
