@@ -52,7 +52,7 @@ info "Installing Python dependencies (cartopy can take several minutes on a Pi).
 "$VENV/bin/pip" install --upgrade pip -q
 "$VENV/bin/pip" install -r "$PROJECT_DIR/requirements.txt" -q
 
-info "Installing IT8951 display driver..."
+info "Installing IT8951 display driver and RPi.GPIO..."
 "$VENV/bin/pip" install RPi.GPIO IT8951 -q
 
 # ---------------------------------------------------------------------------
@@ -60,6 +60,10 @@ info "Installing IT8951 display driver..."
 # ---------------------------------------------------------------------------
 mkdir -p "$PROJECT_DIR/plots" "$PROJECT_DIR/images"
 info "Directories ready."
+
+# Clear cached base map so it regenerates with current config and shapefiles
+rm -f "$PROJECT_DIR/plots/"*.pickle "$PROJECT_DIR/images/"*_base_map.png
+info "Cleared base map cache — will regenerate on first run."
 
 # ---------------------------------------------------------------------------
 # 3. Fonts
