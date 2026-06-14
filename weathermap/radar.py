@@ -381,7 +381,7 @@ def _remap_rainviewer_to_grayscale(path):
     radar_layer[is_radar, 3] = 220
 
     radar_img = Image.fromarray(radar_layer, "RGBA").filter(ImageFilter.GaussianBlur(radius=3))
-    base = img.convert("L").convert("RGB")
+    base = Image.open(config.base_map_path.format(country="Ireland")).convert("RGB")
     base.paste(radar_img, (0, 0), radar_img)
     base.save(path)
 
